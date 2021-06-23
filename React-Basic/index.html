@@ -3,32 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <title>First React Component</title>
+
+    <!--웹팩 : 쪼개진 js 파일을 html이 실행할 수 있는 js파일로 합쳐줌-->
+    <!--<script src="like-button.js"></script> -->
+
+    <!-- react를 사용하기 위한 DOM 모델(1 : 핵심 필요한 코드 / 2 : 리액트 코드를 js에 붙임)-->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    
+    <!-- 개발 시에는 react-dom.development.js / 배포 시에는 production.js로 변경 -->
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
 </head>
 <body>
+    <!-- id값이 root인 div 태그에 렌더링한 LikeButton이 그려짐(렌더링) -->
     <div id="root"></div>
     <script>
-        // 새로운 요소 생성
+        // 새로운 요소 생성(html 태그)
         const e = React.createElement;
 
+        /* react 안의 component를 상속해옴 (=extends React.Component) */
         class LikeButton extends React.Component {
 
-            // 컴포넌트 실행 시 가장 먼저 실행
+            // 컴포넌트 실행 시 가장 먼저 실행(=class에는 기본적으로 constructor가 존재)
             constructor(props) {
                 super(props);
+                // 바뀔수 있는 부분이 state, 상태
+                this.state = {
+                    liked : false,
+                };
             }
 
-            // 화면에 어떻게 표시할 지 정의
+            // 화면에 어떻게 표시할 지 정의(직접 만드는 것이 아니라, 정의만-> script에서 제작)
+            // 만들겠다 --> js가 인지하고 컴포넌트를 렌더링
             render() {
-                return e('button', null, 'Like'); //<button>Like</button> 을 만들겠다는 의미
+                
+                // 클릭 시 state(상태)를 좋아요를 눌렀음 (=liked : true) 으로 변경
+                return e('button', 
+                { onClick: () => { this.setState({ liked : true })},
+                type : 'submit'},
+
+                    // 삼항연산자 사용(state가 true로 바뀌면-> 클릭 시 글자가 Liked로 변경)
+                    // constructor의 상태만 바뀌면, 글자가 함께 바뀜(data=상태와 화면의 일치)
+                    this.state.liked === true ? "Liked" : "Like",
+                );
+                 //<button>Like</button> 을 만들겠다는 의미
+
+                 // $("button").text("Liked") 와 같음
             }
         }
     </script>
 
     <script>
-        // component로 만들겠다 한 것을 화면에 실제로 구현(렌더링)
-        // component를 id root 안에 그릴 것
+        // reactDOM 이 만든 것을 화면에 렌더링해줌(=ReactDOM.render)
+        // LikeButton을 DOM 에 붙이겠다(위치 지정) --> 직접 그린다
         ReactDOM.render(e(LikeButton), document.querySelector('#root'));
     </script>
 </body>
