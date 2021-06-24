@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Babel basic</title>
+
+    <!-- react를 사용하기 위한 DOM 모델(1 : 핵심 필요한 코드 / 2 : 리액트 코드를 js에 붙임)-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    
+    <!-- 개발 시에는 react-dom.development.js / 배포 시에는 production.js로 변경 -->
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+ 
+    <!-- Babel(script+type 지정 시 JSX 문법을 모든 브라우저에서 돌아갈 수 있는 es5 문법으로 변환) -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <!-- id값이 root인 div 태그에 렌더링한 LikeButton이 그려짐(렌더링) -->
+    <div id="root"></div>
+
+    <!-- js안에서 html을 쓰는 문법을 지원할 수 있음 (babel script + type을 text/babel)-->
+    <script type="text/babel">
+
+        /* react 안의 component를 상속해옴 (=extends React.Component) */
+        class LikeButton extends React.Component {
+
+            // 컴포넌트 실행 시 가장 먼저 실행(=class에는 기본적으로 constructor가 존재)
+            constructor(props) {
+                super(props);
+                // 바뀔수 있는 부분이 state, 상태
+                this.state = {
+                    liked : false,
+                };
+            }
+
+            // 화면에 어떻게 표시할 지 정의(직접 만드는 것이 아니라, 정의만-> script에서 제작)
+            // 만들겠다 --> js가 인지하고 컴포넌트를 렌더링
+            render() {
+                
+                // createElement를 사용하지 않고 html태그처럼 사용 가능
+                // JSX ( JS + XML ) --> Babel이 JSX 문법을 createElement와 같이 바꿔줌
+                // content 부분에 {} 로 감싼 js로, 상태에 따라 텍스트 문구를 넣어줌
+                return <button type="submit" 
+                onClick={() => { this.setState({ liked : true })}}>
+                 { this.state.liked === true ? "Liked" : "Like" }
+                </button>;
+
+            }
+        }
+
+        <button onClick={onClick}>Like</button>
+    </script>
+
+    <script type="text/babel">
+      // component기 때문에 추가한 만큼 원하는 대로 만들 수 있음
+      // 유지보수에 편리(재사용성)
+      // 대문자로 시작(ex. LikeButton) 하는 것은 Component, <div>와 같은 것은 일반 html 태그
+        reactDOM.render(<div>
+          <LikeButton />
+          <LikeButton />
+          <LikeButton />
+          <LikeButton />
+          </div>, document.querySelector('#root'));
+    </script>
+</body>
+</html>

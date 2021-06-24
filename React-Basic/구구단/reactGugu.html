@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Babel basic</title>
+
+    <!-- react를 사용하기 위한 DOM 모델(1 : 핵심 필요한 코드 / 2 : 리액트 코드를 js에 붙임)-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    
+    <!-- 개발 시에는 react-dom.development.js / 배포 시에는 production.js로 변경 -->
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+ 
+    <!-- Babel(script+type 지정 시 JSX 문법을 모든 브라우저에서 돌아갈 수 있는 es5 문법으로 변환) -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <!-- id값이 root인 div 태그에 렌더링한 LikeButton이 그려짐(렌더링) -->
+    <div id="root"></div>
+
+    <!-- Gugudan Component 생성 -->
+    <script type="text/babel">
+      class GuGuDan extends React.Component {
+        constructor(props) {
+          super(props);
+
+          // 바뀌는 속성값을 추가(num1, num2, 입력값 input value, 결과멘트) -> state
+          this.state = {
+            // 숫자값은 랜덤으로 생성(구구단), input value와 resultMent는 기본값이 없으므로 빈값으로 초기화
+            first : Math.ceil(Math.random() * 9),
+            second : Math.ceil(Math.random() * 9),
+            value : "",
+            result : "",
+
+          };
+        }
+
+        // 화면에 그리겠다
+        render() {
+          return ;
+        }
+      }
+    </script>
+
+    <script type="text/babel">
+      ReactDOM.render(<GuGuDan>, document.querySelector('#root'));
+    </script>
+</body>
+</html>
