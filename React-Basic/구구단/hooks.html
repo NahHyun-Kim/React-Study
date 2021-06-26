@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>구구단</title>
+
+    <meta charset="UTF-8" />
+    <!-- react를 사용하기 위한 DOM 모델(1 : 핵심 필요한 코드 / 2 : 리액트 코드를 js에 붙임)-->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    
+    <!-- 개발 시에는 react-dom.development.js / 배포 시에는 production.js로 변경 -->
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+ 
+    <!-- Babel(script+type 지정 시 JSX 문법을 모든 브라우저에서 돌아갈 수 있는 es5 문법으로 변환) -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+    // 함수, functional conponent(setState랑 ref를 사용하지 않으면 함수 component 사용)
+      const Gugudan = () => {
+        // state를 hook으로 선언하는 방법(state를 하나씩 분리 -> 전용 state)
+        // 첫번째 [] state, 두번째 [] setState 규칙과 같다고 생각하면 됨
+          const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+          const [second, setsecond] = React.useState(Math.ceil(Math.random() * 9));
+          const [value, setValue] = React.useState('');
+          const [result, setResult] = React.useState('');
+          // ref 선언방식 변경
+          const inputRef = React.useRef(null);
+
+        const onChangeInput = (e) => {
+          setValue(e.target.value);
+        };
+
+        const onSubmitForm = (e) => {
+          e.preventDefault();
+          if (parseInt(this.state.value) === this.state.first * this.state.second) {
+                    
+            setResult('정답!' + value);
+            setFirst(Math.ceil(Math.random() * 9));
+            setSecond(Math.ceil(Math.random() * 9));
+            setValue('');
+            // (this.input.focus와 다르게 hook에서는 const로 React.useRef 선언후 변수명.current.focus() 로 사용한다.)
+            // (React.useRef로 DOM에 접곤 + current 사용)
+            inputRef.current.focus();
+
+            } else {
+              setValue('땡!');
+              setValue('');
+              inputRef.current.focus();
+                  }
+              }
+        };
+
+          // eventListner 사용 시 class가 없어서 class 메소드는 사용하지 못함
+        return <React.Fragment>
+          <div>{first} 곱하기 {second}는?</div>
+          <form onSubmit={}>
+            <input ref={} onChange={onChangeInput} value={value} />
+            <button>입력!</button>
+          </form>
+          <div id="result">{result}</div>
+          </React.Fragment>
+      }
+    </script>
+
+    <script type="text/babel">
+      ReactDOM.render(<Gugudan />, document.querySelector('#root'));
+    </script>
+</body>
+</html>
