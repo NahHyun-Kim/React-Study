@@ -91,7 +91,7 @@
                   type="number" value={this.state.value} 
                   onChange={this.onChange} />
 
-                      <button type='submit'>입력!</button>
+                      <button type='submit' className='' htmlFor=''>입력!</button>
               </form>
               <div>{this.state.result}</div>
             </React.Fragment>
@@ -99,6 +99,7 @@
         }
       }
       // form이 없는 경우는 button onclick, form이 있으면 onSubmit 사용  권장
+      // react에는 class를 사용하지 못함(대신 className 사용), for대신 htmlFor 사용
     </script>
 
     <script type="text/babel">

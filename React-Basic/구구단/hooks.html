@@ -22,12 +22,15 @@
       const Gugudan = () => {
         // state를 hook으로 선언하는 방법(state를 하나씩 분리 -> 전용 state)
         // 첫번째 [] state, 두번째 [] setState 규칙과 같다고 생각하면 됨
+        // state가 바뀌면 처음부터 재 실행되어 class보다 조금 느릴 수는 있으나, 리액트에서 사용 권장
           const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
           const [second, setsecond] = React.useState(Math.ceil(Math.random() * 9));
           const [value, setValue] = React.useState('');
           const [result, setResult] = React.useState('');
           // ref 선언방식 변경
           const inputRef = React.useRef(null);
+
+          // const [state, setState] = React.useState({ 로 first: 선언,...}) 형태로도 가능하나, 일부 state만 변경 시에는 선언되지 않는 state가 사라짐
 
         const onChangeInput = (e) => {
           setValue(e.target.value);
@@ -36,8 +39,13 @@
         const onSubmitForm = (e) => {
           e.preventDefault();
           if (parseInt(this.state.value) === this.state.first * this.state.second) {
-                    
-            setResult('정답!' + value);
+                  
+            // 이전 상태의 prevResult를 사용하는 경우에는 함수 형태로 return과 함께 사용
+            setResult((prevResult) => {
+              return '정답! ' + value;
+            });
+
+            // setResult('정답!' + value);
             setFirst(Math.ceil(Math.random() * 9));
             setSecond(Math.ceil(Math.random() * 9));
             setValue('');
