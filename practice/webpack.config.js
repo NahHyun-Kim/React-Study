@@ -1,5 +1,5 @@
 const path = require('path'); // node 기술
-const nodeExternals = require('webpack-node-externals'); // cannot find src 오류 해결을 위한 플러그인 설치 및 해결
+//const nodeExternals = require('webpack-node-externals'); // cannot find src 오류 해결을 위한 플러그인 설치 및 해결
 //const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 
 
@@ -21,8 +21,29 @@ module.exports = {
         filename: 'app.js'
     }, // 출력
 
-    target: 'node',
-    externals: [nodeExternals()],
+    module: {
+        rules: [{
+            test: /\.jsx?$/,
+            loader: 'babel-loader',
+            options: {
+                presets: [
+                    ['@babel/preset-env', {
+                        targets: {
+                            browsers: ['> 1% in KR'], // browserslist
+                        },
+                        debug: true,
+                    }],
+                    '@babel/preset-react',
+                ],
+                plugins: [
+                    '@babel/plugin-proposal-class-properties',
+                    'react-refresh/babel',
+                ],
+            },
+        }],
+    },
+    //target: 'node',
+    //externals: [nodeExternals()],
 
 };
 
