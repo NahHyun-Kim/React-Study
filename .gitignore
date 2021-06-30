@@ -70,6 +70,7 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+.idea/misc.xml
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
@@ -430,6 +431,7 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/react,reactnative,webstorm
 
-webpack/package.json
-webpack/package-lock.json
-webpack/webpack-config.js
+practice/package.json
+practice/package-lock.json
+practice/node_modules/*
+node_modules/*
