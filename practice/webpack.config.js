@@ -21,24 +21,15 @@ module.exports = {
         filename: 'app.js'
     }, // 출력
 
+    // preset-env(최신 문법이 옛날 브라우저에서도 돌아갈 수 있게 맞춰줌), react(jsx 문법 지원)
     module: {
         rules: [{
             test: /\.jsx?$/,
             loader: 'babel-loader',
             options: {
-                presets: [
-                    ['@babel/preset-env', {
-                        targets: {
-                            browsers: ['> 1% in KR'], // browserslist
-                        },
-                        debug: true,
-                    }],
-                    '@babel/preset-react',
-                ],
-                plugins: [
-                    '@babel/plugin-proposal-class-properties',
-                    'react-refresh/babel',
-                ],
+                presets:
+                    ['@babel/preset-env', '@babel/preset-react'],
+                plugins: ['@babel/plugin-proposal-class-properties'],
             },
         }],
     },
@@ -51,3 +42,5 @@ module.exports = {
 //     "dev" : "webpack"
 //   }, --> 스크립트명이 dev. --> npm run dev로 실행 가능(웹팩)
 // 또는 npx webpack 으로 실행
+
+// 실행 오류 해결 : babel을 읽을 수 있게 npm에도 babel 관련 설정 설치 + config.js에 module={} 부분으로 babel을 사용할 수 있게 설정
