@@ -1,6 +1,7 @@
 // import React, { Component } from 'react';
 const React = require('react'); //(default)
 const { Component } = React; //(const 변수)
+const { createRef } = React; // React.createRef()  사용 -> createRef() 선언 후 변수명.current.focus()
 const Try = require('./Try');
 
 function getNumbers() { // 임의의 숫자 네 개 뽑기(겹치지 않게)
@@ -21,16 +22,27 @@ class NumberBaseball extends Component {
         answer: getNumbers(), // 숫자 가져오기(초기 답) [1,3,5,7]
         tries: [], // react에서는 push 쓰지 않음
     };
+    
+    constructor(props) {
+        super(props);
+
+        // 함수 내 다른 동작을 할 수 있음(this.props.filter(() => 로 filtered...등 응용 가능)
+        this.state = {
+            result: this.props.result,
+            try: this.props.try,
+        };
+    };
 
     // 직접 만든 메소드는 () => 로 사용(쓰지 않으면 constructor를 사용해야 함
     onSubmitForm = (e) => {
         e.preventDefault();
         // 입력받은 값과 getNumber()로 생성한 숫자값이 일치하면(join으로 합침)
         if (this.state.value === this.state.answer.join('')) {
-            this.setState({
-                result: '홈런',
-                // 배열에 넣어주기(...this.state.tries로 기존 배열 복사 후, 새로운 내용 넣기)
-                tries: [...this.state.tries, { try : this.state.value, result: '홈런'}]
+            this.setState((prevState) => {
+                return {
+                    result: '홈런!',
+                    tries: [...prevState.tries, { try: value, result: '홈런!'}],
+                }
             });
             // 홈런일 때도, 숫자 초기화 및 게임 다시 시작
             alert('게임을 다시 시작합니다!');
@@ -45,7 +57,7 @@ class NumberBaseball extends Component {
             let ball = 0;
             if (this.state.tries.length >= 9) {
                 this.setState({
-                    result: `10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`,
+                    result: `10번 넘게 틀려서 실패! 답은 ${answerArray.join(',')}였습니다!`,
 
                 });
                 alert('게임을 다시 시작합니다!');
@@ -54,7 +66,8 @@ class NumberBaseball extends Component {
                     value: '',
                     answer: getNumbers(),
                     tries: []
-                })
+                });
+                this.inputRef.current.focus();
             } else { // 10번이 되지 않게 틀린 경우
                 for (let i=0; i<4; i++) {
                     if (answerArray[i] === this.state.answer[i]) {
@@ -65,12 +78,14 @@ class NumberBaseball extends Component {
                     }
                 }
                 // 실패한 tries에 데이터 추가
-                this.setState({
-                    // push를 사용하지 않으므로, 복사한 배열([...배열명] 에 값을 넣어줌), `${ball}`의 형태로 변수에 접근
-                    tries: [...this.state.tries, { try: this.state.value, result: `${strike} 스트라이크, ${ball} 볼입니다.`}],
-                    value: '',
-
+                this.setState((prevState) => {
+                    return {
+                        // push를 사용하지 않으므로, 복사한 배열([...배열명] 에 값을 넣어줌), `${ball}`의 형태로 변수에 접근
+                        tries: [...prevState.tries, {try: this.state.value, result: `${strike} 스트라이크, ${ball} 볼입니다.`}],
+                        value: '',
+                    }
                 });
+                this.inputRef.current.focus();
             }
         };
     };
@@ -82,6 +97,13 @@ class NumberBaseball extends Component {
         })
     };
 
+    /*
+    * onInputRef = (c) => { 형태로 사용하면(함수형) 좀더 유동적으로 사용 가능
+    * this.inputRef = c;
+    * */
+    inputRef = createRef();
+
+    // render() 안에는 setState() 사용하지 않음
     render() {
         {/* 구조분해로 사용할 수 있음 (this.state.result로 매번 접근하지 않아도 됨) */}
         const { result, value, tries } = this.state;
@@ -89,7 +111,7 @@ class NumberBaseball extends Component {
             <>
                 <h1>{result}</h1>
                 <form onSubmit={this.onSubmitForm}>
-                    <input maxLength={4} value={value} onChange={this.onChangeInput}/>
+                    <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput}/>
                 </form>
                 <div>시도 : {tries.length}</div>
                 <ul>

@@ -2,7 +2,7 @@ const path = require('path'); // node 기술
 const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 //const nodeExternals = require('webpack-node-externals'); // cannot find src 오류 해결을 위한 플러그인 설치 및 해결
 //const createExpoWebpackConfigAsync = require('@expo/webpack-config');
-
+// 실 배포시 process.env.NODE_ENV = 'production', mode: 'production'으로 변경
 
 module.exports = {
     name: 'word-relay-setting',
