@@ -1,44 +1,101 @@
 // import React, { Component } from 'react';
 const React = require('react'); //(default)
 const { Component } = React; //(const 변수)
+const Try = require('./Try');
 
 function getNumbers() { // 임의의 숫자 네 개 뽑기(겹치지 않게)
-
+    const candidate = [1,2,3,4,5,6,7,8,9];
+    const array = [];
+    for (let i = 0; i< 4; i += 1) {
+        const chosen = candidate.splice(Math.floor(Math.random() * ( 9 - i )), 1)[0];
+        array.push(chosen);
+    }
+    return array;
 }
 
 class NumberBaseball extends Component {
 
     state = {
         result: '',
-        input: '',
-        answer: getNumbers(), // 숫자 가져오기(초기 답)
-        tries: [],
+        value: '', // 입력해서 추측하는 숫자
+        answer: getNumbers(), // 숫자 가져오기(초기 답) [1,3,5,7]
+        tries: [], // react에서는 push 쓰지 않음
     };
 
     // 직접 만든 메소드는 () => 로 사용(쓰지 않으면 constructor를 사용해야 함
-    onSubmitForm = () => {
+    onSubmitForm = (e) => {
+        e.preventDefault();
+        // 입력받은 값과 getNumber()로 생성한 숫자값이 일치하면(join으로 합침)
+        if (this.state.value === this.state.answer.join('')) {
+            this.setState({
+                result: '홈런',
+                // 배열에 넣어주기(...this.state.tries로 기존 배열 복사 후, 새로운 내용 넣기)
+                tries: [...this.state.tries, { try : this.state.value, result: '홈런'}]
+            });
+            // 홈런일 때도, 숫자 초기화 및 게임 다시 시작
+            alert('게임을 다시 시작합니다!');
+            this.setState({
+                value: '',
+                answer: getNumbers(),
+                tries: [],
+            })
+        } else {
+            const answerArray = this.state.value.split('').map((v) => parseInt(v));
+            let strike = 0;
+            let ball = 0;
+            if (this.state.tries.length >= 9) {
+                this.setState({
+                    result: `10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`,
 
+                });
+                alert('게임을 다시 시작합니다!');
+                // 새로운 게임을 시작하기 때문에 초기화
+                this.setState({
+                    value: '',
+                    answer: getNumbers(),
+                    tries: []
+                })
+            } else { // 10번이 되지 않게 틀린 경우
+                for (let i=0; i<4; i++) {
+                    if (answerArray[i] === this.state.answer[i]) {
+                        strike += 1; // 자리와 숫자가 모두 일치하는 경우 Strike
+                    } // 자리는 일치하지 않으나 같은 숫자를 포함하면 Ball
+                    else if (this.state.answer.includes(answerArray[i])) {
+                        ball += 1;
+                    }
+                }
+                // 실패한 tries에 데이터 추가
+                this.setState({
+                    // push를 사용하지 않으므로, 복사한 배열([...배열명] 에 값을 넣어줌), `${ball}`의 형태로 변수에 접근
+                    tries: [...this.state.tries, { try: this.state.value, result: `${strike} 스트라이크, ${ball} 볼입니다.`}],
+                    value: '',
+
+                });
+            }
+        };
     };
 
-    onChangeInput = () => {
-
+    onChangeInput = (e) => {
+        console.log(this.state.answer);
+        this.setState({
+            value: e.target.value
+        })
     };
 
     render() {
+        {/* 구조분해로 사용할 수 있음 (this.state.result로 매번 접근하지 않아도 됨) */}
+        const { result, value, tries } = this.state;
         return (
             <>
-                <h1>{this.state.result}</h1>
+                <h1>{result}</h1>
                 <form onSubmit={this.onSubmitForm}>
-                    <input maxLength={4} value={this.state.value} onChange={this.onChangeInput}/>
+                    <input maxLength={4} value={value} onChange={this.onChangeInput}/>
                 </form>
-                <div>시도 : {this.state.tries.length}</div>
+                <div>시도 : {tries.length}</div>
                 <ul>
-                    {[{ fruit: '사과', taste : '맛있다'},
-                        { fruit : '바나나', taste : '별로다'},
-                        { fruit : '멜론', taste : '달다'}
-                    ].map((v, i) => {
+                    {tries.map((v, i) => {
                         return (
-                            <li key={v.fruit + v.taste}><b>{v.fruit}</b> - {v.taste} </li>
+                            <Try key={`${i+1}차 시도 : `} tryInfo={v} />
                         );
                     })}
 
@@ -58,14 +115,4 @@ module.exports = NumberBaseball;
 // module.exports = NumberBaseball;
 // exports.hello = 'hello';
 
-/*
-map : react에서 반복문을 사용하게 함
-배열 { [].map( () => { return ( <li>반복할</li>... 형태로 실행
-
-[] 배열로 접근하기 : ex) '사과', '맛있다'의 경우 ['사과', '맛있다'] , [또 다른 과일과 상태]... 로 [0], [1]로 배열의 인덱스 접근
-{} 객체로 접근하기 : ex) { fruit : '사과', taste : '맛있다' } ... 로 v.fruit, v.taste와 같이 접근 (이름)
-
-React에서 map 사용시 key를 적어야 한다 ex) return값에서 <li key={v.fruit}> 과 같이 지정해야 함
-return 생략 가능 (바로 {}.map((v) => <li key={}>{state}</li> )} 와 같이 쓸 수 있다.
-key값으로 i만 쓸 경우에는 성능 최적화에 좋지 않음
- */
+// map(배열을 1:1로 짝지어줌)
