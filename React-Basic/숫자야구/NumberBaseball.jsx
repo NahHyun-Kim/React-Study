@@ -22,7 +22,7 @@ class NumberBaseball extends Component {
         answer: getNumbers(), // 숫자 가져오기(초기 답) [1,3,5,7]
         tries: [], // react에서는 push 쓰지 않음
     };
-    
+
     constructor(props) {
         super(props);
 
