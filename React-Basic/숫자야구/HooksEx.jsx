@@ -78,6 +78,13 @@ const HooksEx = () => {
         setValue(e.target.value);
     };
 
+    // jsx는 배열 안에 JSX를 담아 리턴하는 것이 가능하다.(key 필수, 참고만)
+    // return [
+    //     <div key="사과">사과</div>,
+    //     <div key="배">배</div>,
+    //     <div key="감">감</div>
+    // ];
+
     return (
         <>
             <h1>{result}</h1>

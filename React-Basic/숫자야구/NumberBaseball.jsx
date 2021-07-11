@@ -121,6 +121,15 @@ class NumberBaseball extends Component {
                         );
                     })}
 
+                    {/* 즉시 실행 함수로 만들기(for문 사용 가능)
+                        {(() => {
+                            const arary = [];
+                            for (let i=0; i<tries.length; i++) {
+                                array.push(<Try key={`${i+1}차 시도 : ${v.try}`} tryInfo={v} />);
+                            }
+                            return array;
+                        })()}
+                    */}
                 </ul>
             </>
         )
