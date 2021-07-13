@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>바닐라 js 시계</title>
+</head>
+<body>
+<script type="text/javascript">
+    function init() {
+        NowTime();
+    }
+
+    function NowTime(){
+        var today = new Date();
+        var hour = today.getDate();
+        var minute = today.getMinutes();
+        var second = today.getSeconds();
+        var nowTime = hour + ":"
+            + `${minute < 10 ? `0${minute}` : minute}` + ":"
+            + `${second < 10 ? `0${second}` : second}`;
+        document.getElementById("time").innerHTML = nowTime;
+    }
+
+    // 1초에 한번씩 실행
+    setInterval(NowTime, 1000)
+</script>
+
+<div id="time"></div>
+</body>
+</html>
