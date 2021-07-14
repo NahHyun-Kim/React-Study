@@ -46,8 +46,10 @@ document.querySelectorAll('.btn').forEach(function(btn) {
 
         var myChoice = this.textContent;
         var myScore = score[myChoice];
-        var computerScore = score[computerScore(imgRef)];
-        var scoreDiff = myScore - computerScore;
+        var computerScore = score[computerChoice(imgRef)];
+        var scoreDiff = parseInt(myScore) - parseInt(computerScore);
+
+        console.log("점수차 : " + scoreDiff);
 
         if (scoreDiff === 0) {
             alert('비겼습니다.');
